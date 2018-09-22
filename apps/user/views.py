@@ -26,7 +26,6 @@ class LoginView(View):
             # 用户输入了数据
             # 将数据拿到数据库进行比对
             x = User.objects.filter(phone=phone).first()
-            print(x.password)
             if password == x.password:
                 # 验证通过
                 # 设置sesson

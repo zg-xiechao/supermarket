@@ -31,10 +31,14 @@ class UserForm(forms.Form):
         # 获取用户输入的电话号码
         phone = self.cleaned_data.get("phone")
         num = User.objects.filter(phone=phone).exists()
-        if len(num) == 1:
-            raise forms.ValidationError({"phone": "手机号已经注册"})
-        else:
-            return phone
+        # if len(num) == 1:
+        #     raise forms.ValidationError({"phone": "手机号已经注册"})
+        # else:
+        #     return phone
+        rs = User.objects.filter(phone=phone).exists()
+        if rs:
+            raise forms.ValidationError("该手机号码已经被注册!")
+        return phone
 
     def clean(self):
         # 验证两次密码是否一致
