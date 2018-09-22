@@ -24,7 +24,8 @@
             {% csrf_token %}
             <li>
                 <i>昵称</i>
-                <input class="infor-tele" name="nickname" placeholder="请输入昵称"/>
+{#                <input class="infor-tele" name="nickname" placeholder="请输入昵称"/>#}
+                {{ form.nickname }}
             </li>
             <li>
                 <a href="">

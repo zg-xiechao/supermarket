@@ -22,7 +22,7 @@ class User(BoseModel):
     )
     username = models.CharField(max_length=16, validators=[validators.MinLengthValidator(6)], verbose_name="用户名")
     password = models.CharField(max_length=32, verbose_name="密码")
-    phone = models.CharField(max_length=11, unique=True, verbose_name="手机号")
+    phone = models.CharField(max_length=11, verbose_name="手机号")
     nickname = models.CharField(max_length=16, null=True, blank=True, verbose_name="昵称")
     # 默认1为男 2为女 3为保密
     gender = models.SmallIntegerField(choices=sex_choices, default=3, verbose_name="性别")

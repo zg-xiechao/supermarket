@@ -6,10 +6,12 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
 
 from Supermarket.settings import BASE_DIR
-from user.forms import UserForm, UserModelForm
+from user.forms import UserForm, LoginForm, InfoForm
+from user.helper import verify_login_required
 from user.models import User
 
 
@@ -19,32 +21,45 @@ class LoginView(View):
         return render(request, "user/login.html")
 
     def post(self, request):
+        data = request.POST
+        form = LoginForm(data)
+        if form.is_valid():
+            # 获取用户信息
+            user = form.cleaned_data.get("user")
+            print(user.phone)
+            # 发送session
+            request.session['ID'] = user.pk
+            request.session['phone'] = user.phone
+            # 设置有效期, 关闭浏览器就 重新登录
+            request.session.set_expiry(0)
+            return redirect(reverse("user:个人中心"))
+        return render(request, "user/login.html", {"form": form})
         # 获取数据
-        phone = request.POST.get("phone")
-        password = request.POST.get("password")
-        if all((phone, password)):
-            # 用户输入了数据
-            # 将数据拿到数据库进行比对
-            x = User.objects.filter(phone=phone).first()
-            if password == x.password:
-                # 验证通过
-                # 设置sesson
-                request.session['phone'] = phone
-                request.session.set_expiry(0)
-                url = reverse("user:个人中心")
-                return redirect(url)
-            else:
-                # 验证不通过
-                context = {
-                    "errors": "账号或密码错误,请重新输入"
-                }
-                return render(request, "user/login.html", context)
-        else:
-            # 用户没有输入数据
-            context = {
-                "errors": "请输入手机号或密码"
-            }
-            return render(request, "user/login.html", context)
+        # phone = request.POST.get("phone")
+        # password = request.POST.get("password")
+        # if all((phone, password)):
+        #     # 用户输入了数据
+        #     # 将数据拿到数据库进行比对
+        #     x = User.objects.filter(phone=phone).first()
+        #     if password == x.password:
+        #         # 验证通过
+        #         # 设置sesson
+        #         request.session['phone'] = phone
+        #         request.session.set_expiry(0)
+        #         url = reverse("user:个人中心")
+        #         return redirect(url)
+        #     else:
+        #         # 验证不通过
+        #         context = {
+        #             "errors": "账号或密码错误,请重新输入"
+        #         }
+        #         return render(request, "user/login.html", context)
+        # else:
+        #     # 用户没有输入数据
+        #     context = {
+        #         "errors": "请输入手机号或密码"
+        #     }
+        # return render(request, "user/login.html")
 
 
 class RegView(View):
@@ -90,23 +105,29 @@ class ForgetpasswordView(View):
 
 class MemberView(View):
     # 个人中心
+    # @method_decorator(verify_login_required)
     def get(self, request):
-        # 获取session,根据键读取值
-        phone = request.session.get("phone", 0)
-        if phone:
-            # 有session传过来
-            # 根据username获取参数
-            data = User.objects.filter(phone=phone).first()
-            context = {
-                "data": data,
-            }
-            return render(request, "user/member.html", context)
-        else:
-            # 没有session,跳转到登陆页面
-            return render(request, "user/login.html")
+        # # 获取session,根据键读取值
+        # phone = request.session.get("phone", 0)
+        # if phone:
+        #     # 有session传过来
+        #     # 根据username获取参数
+        data = request.session.get("phone")
+        context = {
+            "data": data,
+        }
+        return render(request, "user/member.html", context)
+
+    # else:
+    #     # 没有session,跳转到登陆页面
+    #     return render(request, "user/login.html")
 
     def post(self, request):
         pass
+
+    @method_decorator(verify_login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
 def quit(request):
@@ -119,14 +140,11 @@ def quit(request):
 
 class InfoView(View):
     def get(self, request):
-        # 获取session值
-        phone = request.session.get("phone")
-        data = User.objects.filter(phone=phone)
-        form = UserModelForm(data)
+        form = InfoForm()
         context = {
             "form": form
         }
-        return render(request, "user/infor.html")
+        return render(request, "user/infor.html",context)
 
     def post(self, request):
         pass
