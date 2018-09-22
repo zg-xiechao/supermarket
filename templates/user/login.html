@@ -1,0 +1,30 @@
+{% extends "user/header.html" %}
+<!--<div class="login-logo">
+    <img src="images/logo.png" />
+</div>-->
+{% load static %}
+{% block title %}
+    登陆
+{% endblock %}
+{% block content %}
+    <div style="height: 3rem;"></div>
+    <form action="{% url "user:登陆页面" %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="phone" id="mobile" placeholder="请输入用户名/手机号" class="login-name">
+        <p class="text-danger">{{ form.errors.phone.0 }}</p>
+        <input type="password" name="password" id="password" placeholder="请输入密码" class="login-password">
+        <p class="text-danger">{{ errors }}</p>
+        <input type="submit" class="login-btn" value="我要登录">
+    </form>
+    <div class="agree">
+        <a href="{% url "user:注册页面" %}">免费注册</a>
+        <a href="{% url "user:忘记密码页面" %}" class="forget">忘记密码？</a>
+    </div>
+    <div class="line"></div>
+    <div class="line-text">第三方账号登录</div>
+    <ul class="second-login">
+        <li><a href=""><img src="{% static "images/wxlogin.png" %}"/></a></li>
+        <li><a href=""><img src="{% static "images/qqlogin.png" %}"/></a></li>
+        <li><a href=""><img src="{% static "images/sinalog.png" %}"/></a></li>
+    </ul>
+{% endblock %}

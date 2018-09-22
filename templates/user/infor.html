@@ -1,0 +1,73 @@
+{% extends "user/header.html" %}
+{% load static %}
+{% block content %}
+    <header data-am-widget="header" class="am-header am-header-default sq-head ">
+        <div class="am-header-left am-header-nav">
+            <a href="javascript:history.back()" class="">
+                <i class="am-icon-chevron-left"></i>
+            </a>
+        </div>
+        <h1 class="am-header-title">
+            <a href="" class="">个人资料</a>
+        </h1>
+    </header>
+    <ul class="safty1">
+        <li>
+            <a href="">
+                <i style="margin-top: 25px;">头像</i>
+                <div class="infor-pic">
+                    <img src="{% static "images/infortx.png" %}"/>
+                </div>
+            </a>
+        </li>
+        <form action="{% url "user:个人资料" %}" method="post">
+            {% csrf_token %}
+            <li>
+                <i>昵称</i>
+                <input class="infor-tele" name="nickname" placeholder="请输入昵称"/>
+            </li>
+            <li>
+                <a href="">
+                    <i>性别</i>
+                    <i class="infor-tele">
+                        <label class="am-radio-inline">
+                            <input type="radio" name="gender" checked="checked" value="1" data-am-ucheck>男
+                        </label>
+                        <label class="am-radio-inline">
+                            <input type="radio" name="gender" value="2" data-am-ucheck>女
+                        </label>
+                         <label class="am-radio-inline">
+                            <input type="radio" name="gender" value="3" data-am-ucheck>保密
+                        </label>
+                    </i>
+                </a>
+            </li>
+            <li>
+                <i>生日</i>
+                <input class="infor-tele" name="birthday" placeholder="出生日期"/>
+            </li>
+    </ul>
+    <div style="height: 10px; background: #efefef;"></div>
+    <ul class="safty1">
+        <li>
+            <i>学校</i>
+            <input class="infor-tele" name="school" placeholder="就读于哪个学校"/>
+        </li>
+        <li>
+            <i>位置</i>
+            <input class="infor-tele" name="location" placeholder="详细地址"/>
+        </li>
+        <li>
+            <i>故乡</i>
+            <input class="infor-tele" name="hometown" placeholder="来自哪里"/>
+        </li>
+        <li>
+            <i>手机</i>
+            <input class="infor-tele" name="phone" placeholder="13012345678"/>
+        </li>
+        <input type="submit" value="保存">
+        </form>
+    </ul>
+    <script src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static "js/amazeui.min.js" %}"></script>
+{% endblock %}
