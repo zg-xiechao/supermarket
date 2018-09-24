@@ -30,4 +30,4 @@ class User(BoseModel):
     school = models.CharField(max_length=50, null=True, blank=True, verbose_name="学校")
     location = models.CharField(max_length=255, null=True, blank=True, verbose_name="位置")
     hometown = models.CharField(max_length=255, null=True, blank=True, verbose_name="故乡")
-    head_photo = models.ImageField(upload_to="", default="imgages/infortx.png")
+    head_photo = models.ImageField(upload_to="user/%Y%m/%d", default="user/infortx.png",verbose_name="用户头像")

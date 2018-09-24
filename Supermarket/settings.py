@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -121,6 +122,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+# 配置图片路径
+MEDIA_URL = "/static/media/"
+# 图片上传路径
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+
+
+
 # 缓存配置
 CACHES = {
     "default": {
@@ -135,5 +143,4 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
-MEDIA_URL = "/static/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+

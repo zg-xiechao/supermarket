@@ -1,0 +1,42 @@
+{% extends "user/header.html" %}
+{% load static %}
+{% block title %}
+    安全设置
+{% endblock %}
+{% block content %}
+    <header data-am-widget="header" class="am-header am-header-default sq-head ">
+        <div class="am-header-left am-header-nav">
+            <a href="javascript:history.back()" class="">
+                <i class="am-icon-chevron-left"></i>
+            </a>
+        </div>
+        <h1 class="am-header-title">
+            <a href="" class="">安全设置</a>
+        </h1>
+    </header>
+    <ul class="safty">
+        <li>
+            <a href="password.html">
+                <img src="{% static "images/update.png" %}" width="40"/>
+                <i>修改登录密码</i>
+                <span class="am-icon-angle-right"></span>
+            </a>
+        </li>
+        <li>
+            <a href="payment.html">
+                <img src="{% static "images/moneysafty.png" %}" width="40"/>
+                <i>设置支付密码</i>
+                <span class="am-icon-angle-right"></span>
+            </a>
+        </li>
+        <li>
+            <a href="boundphone.html">
+                <img src="{% static "images/moneytele.png" %}" width="40"/>
+                <i>绑定手机号</i>
+                <span class="am-icon-angle-right"></span>
+                <i style="float: right; padding-right: 10px;">136****3128</i>
+            </a>
+            <p style="overflow: hidden;">若你的手机已修改或弃用，请立即更换</p>
+        </li>
+    </ul>
+{% endblock %}

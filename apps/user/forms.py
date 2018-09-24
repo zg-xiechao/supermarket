@@ -27,6 +27,11 @@ class UserForm(forms.Form):
         "max_length": "密码不能大于16位",
         "min_length": "密码不能小于6位"
     })
+    authCode = forms.CharField(
+        error_messages={
+            "required": "请填写验证码"
+        },
+        widget=forms.TextInput(attrs={"class": "reg-yzm", "placeholder": "输入验证码"}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,6 +51,16 @@ class UserForm(forms.Form):
         if rs:
             raise forms.ValidationError("该手机号码已经被注册!")
         return phone
+
+    def clean_authCode(self):
+        # self.cleaned_data.get('verify_code')
+        # 获取用户提交的验证码
+        verify_code = self.cleaned_data.get('verify_code')
+        # 获取原始数据中保存的session验证码
+        session_code = self.data.get('session_code')
+        if verify_code != session_code:
+            raise forms.ValidationError("验证码错误!")
+        return verify_code
 
     def clean(self):
         # 验证两次密码是否一致
@@ -105,6 +120,11 @@ class InfoForm(forms.ModelForm):
         # 渲染表单
         widgets = {
             # "head_photo": forms.ImageField(),
-            "nickname": forms.TextInput(attrs={"class": "infor-tele", "placeholder": "请输入昵称"})
-
+            "nickname": forms.TextInput(attrs={"class": "infor-tele", "placeholder": "请输入昵称"}),
+            "birthday": forms.DateInput(attrs={"class": "infor-tele", 'type': "date", "placeholder": "出生日期"}),
+            "gender": forms.RadioSelect(),
+            "school": forms.TextInput(attrs={"class": "infor-tele", "placeholder": "就读于哪个学校"}),
+            "location": forms.TextInput(attrs={"class": "infor-tele", "placeholder": "详细地址"}),
+            "hometown": forms.TextInput(attrs={"class": "infor-tele", "placeholder": "来自哪里"}),
+            "phone": forms.TextInput(attrs={"class": "infor-tele", "placeholder": "手机号码"}),
         }

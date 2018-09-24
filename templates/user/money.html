@@ -1,0 +1,44 @@
+{% extends "user/header.html" %}
+{% load static %}
+{% block title %}
+    我的钱包
+{% endblock %}
+{% block content %}
+    <header data-am-widget="header" class="am-header am-header-default sq-head ">
+        <div class="am-header-left am-header-nav">
+            <a href="javascript:history.back()" class="">
+                <i class="am-icon-chevron-left"></i>
+            </a>
+        </div>
+        <h1 class="am-header-title">
+            <a href="" class="">我的钱包</a>
+        </h1>
+    </header>
+    <div style="height: 49px;"></div>
+    <ul class="safty">
+        <li>
+            <a href="records.html">
+                <img src="{% static "images/3icon.png" %}" width="40"/>
+                <i style="margin-top: 0.7rem; margin-left: 1rem;">账户余额</i>
+                <span class="am-icon-angle-right"></span>
+                <i class="infor-tele" style="float: right; margin-top: 0.7rem;">0.00</i>
+            </a>
+        </li>
+        <li>
+            <a href="integral.html">
+                <img src="{% static "images/3icon1.png" %}" width="40"/>
+                <i style="margin-top: 0.7rem;  margin-left: 1rem;">积分</i>
+                <span class="am-icon-angle-right"></span>
+                <i class="infor-tele" style="float: right; margin-top: 0.7rem;">4</i>
+            </a>
+        </li>
+        <li>
+            <a href="yhq.html">
+                <img src="{% static "images/3icon2.png" %}" width="40"/>
+                <i style="margin-top: 0.7rem;  margin-left: 1rem;">红包</i>
+                <span class="am-icon-angle-right"></span>
+                <i class="infor-tele" style="float: right; margin-top: 0.7rem;">4</i>
+            </a>
+        </li>
+    </ul>
+{% endblock %}

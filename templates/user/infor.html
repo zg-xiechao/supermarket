@@ -20,7 +20,7 @@
                 </div>
             </a>
         </li>
-        <form action="{% url "user:个人资料" %}" method="post">
+        <form action="{% url "user:个人资料" %}" method="post" novalidate>
             {% csrf_token %}
             <li>
                 <i>昵称</i>
@@ -32,39 +32,47 @@
                     <i>性别</i>
                     <i class="infor-tele">
                         <label class="am-radio-inline">
-                            <input type="radio" name="gender" checked="checked" value="1" data-am-ucheck>男
+{#                            <input type="radio" name="gender" checked="checked" value="1" data-am-ucheck>男#}
+                            {{ form.gender.0 }}
                         </label>
                         <label class="am-radio-inline">
-                            <input type="radio" name="gender" value="2" data-am-ucheck>女
+{#                            <input type="radio" name="gender" value="2" data-am-ucheck>女#}
+                            {{ form.gender.1 }}
                         </label>
                          <label class="am-radio-inline">
-                            <input type="radio" name="gender" value="3" data-am-ucheck>保密
+{#                            <input type="radio" name="gender" value="3" data-am-ucheck>保密#}
+                             {{ form.gender.2 }}
                         </label>
                     </i>
                 </a>
             </li>
             <li>
                 <i>生日</i>
-                <input class="infor-tele" name="birthday" placeholder="出生日期"/>
+{#                <input class="infor-tele" name="birthday" placeholder="出生日期"/>#}
+                {{ form.birthday }}
             </li>
     </ul>
     <div style="height: 10px; background: #efefef;"></div>
     <ul class="safty1">
         <li>
             <i>学校</i>
-            <input class="infor-tele" name="school" placeholder="就读于哪个学校"/>
+{#            <input class="infor-tele" name="school" placeholder="就读于哪个学校"/>#}
+            {{ form.school }}
         </li>
         <li>
             <i>位置</i>
-            <input class="infor-tele" name="location" placeholder="详细地址"/>
+{#            <input class="infor-tele" name="location" placeholder="详细地址"/>#}
+            {{ form.location }}
         </li>
         <li>
             <i>故乡</i>
-            <input class="infor-tele" name="hometown" placeholder="来自哪里"/>
+{#            <input class="infor-tele" name="hometown" placeholder="来自哪里"/>#}
+            {{ form.hometown }}
         </li>
         <li>
             <i>手机</i>
-            <input class="infor-tele" name="phone" placeholder="13012345678"/>
+{#            <input class="infor-tele" name="phone" placeholder="13012345678"/>#}
+            {{ form.phone }}
         </li>
         <input type="submit" value="保存">
         </form>

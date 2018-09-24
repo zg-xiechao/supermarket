@@ -1,7 +1,10 @@
 import os
+import re
+import random
+from os.path import join
 
 from django import forms
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 # Create your views here.
@@ -26,7 +29,6 @@ class LoginView(View):
         if form.is_valid():
             # 获取用户信息
             user = form.cleaned_data.get("user")
-            print(user.phone)
             # 发送session
             request.session['ID'] = user.pk
             request.session['phone'] = user.phone
@@ -65,20 +67,23 @@ class LoginView(View):
 class RegView(View):
     # 注册界面
     def get(self, request):
-        return render(request, "user/reg.html")
+        form = UserForm()
+        return render(request, "user/reg.html", {"form": form})
 
     def post(self, request):
-        # 完成注册
-        # 接收数据
-        data = request.POST
-        form = UserForm(data)  # 实例化对象
+        # 1. 接收数据
+        session_code = request.session.get('random_code')
+        # 强制转换成真正的字典
+        data = request.POST.dict()
+        data['session_code'] = session_code
+        # 2. 处理数据
+        form = UserForm(data)
+        # 3. 响应
         if form.is_valid():
             # 参数合法
             # 获取值
             data = form.cleaned_data
             phone = data.get('phone')
-
-            print(str)
             password = data.get('password1')
             # 写入数据
             User.objects.create(phone=phone, password=password)
@@ -112,7 +117,9 @@ class MemberView(View):
         # if phone:
         #     # 有session传过来
         #     # 根据username获取参数
-        data = request.session.get("phone")
+        phone = request.session.get("phone")
+        # 根据phone获取用户信息
+        data = User.objects.filter(phone=phone).first()
         context = {
             "data": data,
         }
@@ -138,13 +145,98 @@ def quit(request):
     return redirect(url)
 
 
+# 个人资料  性别回显未完成
 class InfoView(View):
     def get(self, request):
-        form = InfoForm()
+        # 获取session值
+        id = request.session.get("ID")
+        user = User.objects.filter(id=id).first()
+        form = InfoForm(instance=user)
         context = {
             "form": form
         }
-        return render(request, "user/infor.html",context)
+        return render(request, "user/infor.html", context)
+
+    def post(self, request):
+        # 获取session中的参数
+        id = request.session.get("ID")
+        # 接收用户修改的数据
+        data = request.POST
+        # form = InfoForm(data)
+        # if form.is_valid():
+        nickname = data.get("nickname")
+        gender = data.get("gender")
+        birthday = data.get("birthday")
+        school = data.get("school")
+        location = data.get("location")
+        hometown = data.get("hometown")
+        phone = data.get("phone")
+        # 将参数修改到数据库  这里需要判断用户修改了哪些吗
+        User.objects.filter(id=id).update(
+            nickname=nickname,
+            gender=gender,
+            birthday=birthday,
+            school=school,
+            location=location,
+            hometown=hometown,
+            phone=phone
+        )
+        return redirect(reverse("user:个人资料"))
+
+
+# 收货地址
+class Gladdress(View):
+    def get(self, request):
+        return render(request, "user/gladdress.html")
 
     def post(self, request):
         pass
+
+
+# 安全设置
+class Saftystep(View):
+    def get(self, request):
+        return render(request, "user/saftystep.html")
+
+    def post(self, request):
+        pass
+
+
+class Money(View):
+    def get(self, request):
+        return render(request, "user/money.html")
+
+    def post(self, request):
+        pass
+
+
+class authCodeView(View):
+    # def get(self, request):
+    #     pass
+
+    def post(self, request):
+        # 1. 接收参数
+        #     1.1 接收用户手机号
+        data = request.POST
+        phone = data.get("phone", "")
+        # 2.处理参数
+        #     2.1 验证手机号格式是否正确
+        phone_re = re.compile("^1[3-9]\d{9}$")
+        res = re.search(phone_re, phone)
+        if res is None:
+            # 手机号码格式错误
+            return JsonResponse({"ststic": 100, "mes": "手机号码格式错误"})
+        #     2.2 验证手机号是否已经注册
+        #         根据手机号查询用户信息
+        user = User.objects.filter(phone=phone).exists()
+        if user:
+            # 手机号已经注册
+            return JsonResponse({"static": 300, "mes": "手机号已经注册"})
+        # 设置一个随机值
+        data = "".join([str(random.randint(0, 9)) for _ in range(4)])
+        print(data)
+        # 把验证码保存到session中
+        request.session["autoCode"] = data
+        request.session.set_expiry(60)
+        return JsonResponse({"static": 200})
+        # 3.响应  是用json格式进行响应
