@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
 from Supermarket.settings import BASE_DIR
 from user.forms import UserForm, LoginForm, InfoForm
@@ -71,14 +72,15 @@ class RegView(View):
         return render(request, "user/reg.html", {"form": form})
 
     def post(self, request):
-        # 1. 接收数据
         session_code = request.session.get('random_code')
         # 强制转换成真正的字典
+        print(session_code)
         data = request.POST.dict()
         data['session_code'] = session_code
         # 2. 处理数据
         form = UserForm(data)
-        # 3. 响应
+        # code = data.cleaned_data.get("verify_code")
+        print(form)
         if form.is_valid():
             # 参数合法
             # 获取值
@@ -95,7 +97,6 @@ class RegView(View):
             context = {
                 "form": form
             }
-            print(form)
             return render(request, "user/reg.html", context)
 
 
@@ -153,7 +154,8 @@ class InfoView(View):
         user = User.objects.filter(id=id).first()
         form = InfoForm(instance=user)
         context = {
-            "form": form
+            "form": form,
+            "user": user
         }
         return render(request, "user/infor.html", context)
 
@@ -184,6 +186,22 @@ class InfoView(View):
         return redirect(reverse("user:个人资料"))
 
 
+# 头像上传
+
+@csrf_exempt
+def head_photo(request):
+    if request.method == "POST":
+        # 接收用户id
+        id = request.session.get("ID")
+        user = User.objects.filter(id=id)
+        user.head_photo = request.FILES["file"]
+        user.save()
+
+        return JsonResponse({"error": 0})
+    else:
+        return JsonResponse({"error": 1})
+
+
 # 收货地址
 class Gladdress(View):
     def get(self, request):
@@ -210,6 +228,7 @@ class Money(View):
         pass
 
 
+# 验证码
 class authCodeView(View):
     # def get(self, request):
     #     pass
@@ -233,10 +252,11 @@ class authCodeView(View):
             # 手机号已经注册
             return JsonResponse({"static": 300, "mes": "手机号已经注册"})
         # 设置一个随机值
-        data = "".join([str(random.randint(0, 9)) for _ in range(4)])
-        print(data)
+        random_code = "".join([str(random.randint(0, 9)) for _ in range(4)])
+        print(random_code)
         # 把验证码保存到session中
-        request.session["autoCode"] = data
+        request.session['random_code'] = random_code
         request.session.set_expiry(60)
-        return JsonResponse({"static": 200})
+        # 3. 响应 json , 告知 ajax是否发送成功
+        return JsonResponse({"status": "200"})
         # 3.响应  是用json格式进行响应

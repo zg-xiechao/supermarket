@@ -10,7 +10,7 @@ from user.views import (LoginView,
                         Saftystep,
                         Money,
                         authCodeView,
-                        )
+                        head_photo)
 
 urlpatterns = [
     url(r'^login/', LoginView.as_view(), name="登陆页面"),
@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^saftystep/', Saftystep.as_view(), name="安全设置"),
     url(r'^money/', Money.as_view(), name="我的钱包"),
     url(r'^authCodeView/', authCodeView.as_view(), name="登陆验证"),
+    url(r'^head_photo/', head_photo, name="图片上传"),
+
 ]

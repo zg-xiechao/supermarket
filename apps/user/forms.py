@@ -27,11 +27,12 @@ class UserForm(forms.Form):
         "max_length": "密码不能大于16位",
         "min_length": "密码不能小于6位"
     })
-    authCode = forms.CharField(
-        error_messages={
-            "required": "请填写验证码"
-        },
-        widget=forms.TextInput(attrs={"class": "reg-yzm", "placeholder": "输入验证码"}))
+    verify_code = forms.CharField(required=True,
+                                  error_messages={
+                                      "required": "请填写验证码!"
+                                  },
+                                  widget=forms.TextInput(attrs={"class": "reg-yzm", "placeholder": "输入验证码"})
+                                  )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,7 +53,7 @@ class UserForm(forms.Form):
             raise forms.ValidationError("该手机号码已经被注册!")
         return phone
 
-    def clean_authCode(self):
+    def clean_verify_code(self):
         # self.cleaned_data.get('verify_code')
         # 获取用户提交的验证码
         verify_code = self.cleaned_data.get('verify_code')
@@ -128,3 +129,4 @@ class InfoForm(forms.ModelForm):
             "hometown": forms.TextInput(attrs={"class": "infor-tele", "placeholder": "来自哪里"}),
             "phone": forms.TextInput(attrs={"class": "infor-tele", "placeholder": "手机号码"}),
         }
+

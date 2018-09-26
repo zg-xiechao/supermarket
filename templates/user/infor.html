@@ -16,15 +16,20 @@
             <a href="">
                 <i style="margin-top: 25px;">头像</i>
                 <div class="infor-pic">
-                    <img src="{% static "images/infortx.png" %}"/>
+                    <img id="head_img" src="{{ MEDIA_URL }}{{ user.head_photo }}"/>
                 </div>
             </a>
         </li>
+        <div id="uploader-demo">
+            <!--用来存放item-->
+            <div id="fileList" class="uploader-list"></div>
+            <div id="filePicker">选择图片</div>
+        </div>
         <form action="{% url "user:个人资料" %}" method="post" novalidate>
             {% csrf_token %}
             <li>
                 <i>昵称</i>
-{#                <input class="infor-tele" name="nickname" placeholder="请输入昵称"/>#}
+                {#                <input class="infor-tele" name="nickname" placeholder="请输入昵称"/>#}
                 {{ form.nickname }}
             </li>
             <li>
@@ -32,23 +37,22 @@
                     <i>性别</i>
                     <i class="infor-tele">
                         <label class="am-radio-inline">
-{#                            <input type="radio" name="gender" checked="checked" value="1" data-am-ucheck>男#}
+                            {#                            <input type="radio" name="gender" checked="checked" value="1" data-am-ucheck>男#}
                             {{ form.gender.0 }}
                         </label>
                         <label class="am-radio-inline">
-{#                            <input type="radio" name="gender" value="2" data-am-ucheck>女#}
+                            {#                            <input type="radio" name="gender" value="2" data-am-ucheck>女#}
                             {{ form.gender.1 }}
                         </label>
-                         <label class="am-radio-inline">
-{#                            <input type="radio" name="gender" value="3" data-am-ucheck>保密#}
-                             {{ form.gender.2 }}
+                        <label class="am-radio-inline">
+                            {#                            <input type="radio" name="gender" value="3" data-am-ucheck>保密#}
+                            {{ form.gender.2 }}
                         </label>
                     </i>
                 </a>
             </li>
             <li>
                 <i>生日</i>
-{#                <input class="infor-tele" name="birthday" placeholder="出生日期"/>#}
                 {{ form.birthday }}
             </li>
     </ul>
@@ -56,22 +60,22 @@
     <ul class="safty1">
         <li>
             <i>学校</i>
-{#            <input class="infor-tele" name="school" placeholder="就读于哪个学校"/>#}
+            {#            <input class="infor-tele" name="school" placeholder="就读于哪个学校"/>#}
             {{ form.school }}
         </li>
         <li>
             <i>位置</i>
-{#            <input class="infor-tele" name="location" placeholder="详细地址"/>#}
+            {#            <input class="infor-tele" name="location" placeholder="详细地址"/>#}
             {{ form.location }}
         </li>
         <li>
             <i>故乡</i>
-{#            <input class="infor-tele" name="hometown" placeholder="来自哪里"/>#}
+            {#            <input class="infor-tele" name="hometown" placeholder="来自哪里"/>#}
             {{ form.hometown }}
         </li>
         <li>
             <i>手机</i>
-{#            <input class="infor-tele" name="phone" placeholder="13012345678"/>#}
+            {#            <input class="infor-tele" name="phone" placeholder="13012345678"/>#}
             {{ form.phone }}
         </li>
         <input type="submit" value="保存">
@@ -79,4 +83,37 @@
     </ul>
     <script src="{% static "js/jquery.min.js" %}"></script>
     <script src="{% static "js/amazeui.min.js" %}"></script>
+
+{% endblock %}
+{% block foot_js %}
+<script>
+        // 初始化Web Uploader
+        var uploader = WebUploader.create({
+            // 选完文件后，是否自动上传。
+            auto: true,
+            // swf文件路径
+            swf: "{% static 'uploader/Uploader.swf' %}",
+            // 文件接收服务端。
+            server: "{% url "user:图片上传" %}",
+            // 选择文钮。可件的按选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#filePicker',
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+        // 当有文件添加进来的时候
+        uploader.on('fileQueued', function (file) {
+            $img = $("#head_img");
+            // 创建缩略图
+            // 如果为非图片文件，可以不用调用此方法。
+            // thumbnailWidth x thumbnailHeight 为 100 x 100
+            uploader.makeThumb(file, function (error, src) {
+                $img.attr('src', src);
+            }, 100, 100);
+        });
+    </script>
 {% endblock %}

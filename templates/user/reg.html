@@ -17,11 +17,11 @@
         <input type="password" name="password2" placeholder="确认密码" class="login-name">
         <p class="text-danger">{{ form.errors.password2.0 }}</p>
         <div class="yzm" style="margin-top: 1.5rem;">
-{#            <input type="text" class="reg-yzm" placeholder="输入验证码"/>#}
-        {{ form.authCode }}
+            {#            <input type="text" class="reg-yzm" placeholder="输入验证码"/>#}
+            {{ form.verify_code }}
             <input type="button" class="yzm-hq" value="获取验证码"/>
         </div>
-        {{ form.errors.authCode.0 }}
+        {{ form.errors.verify_code }}
         <input type="submit" class="login-btn" value="立即注册">
     </form>
     <div class="agree">
@@ -47,10 +47,10 @@
                 {#发送ajax请求到后端进行验证, 将表单上的数据发送出去#}
                 data = {
                     "phone": phone,
-                    "csrfmiddlewaretoken": "2Y3wU5rJ0TKs69DolUbSau141RogspWI4DfOWZkxsix32bbSWmDwjr6IiqLqi6mj"
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
                 };
                 $.post("{% url 'user:登陆验证' %}", data, function (data) {
-                    if (data.static == 200) {
+                    if (data.status == 200) {
                         {#验证成功#}
                         {#按钮不能再点#}
                         $(that).attr('disabled', 'disabled');

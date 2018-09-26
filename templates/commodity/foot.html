@@ -15,34 +15,16 @@
     <link href="{% static "css/style.css" %}" rel="stylesheet" type="text/css"/>
     <script src="{% static "js/jquery-1.10.2.min.js" %}"></script>
     <script src="{% static "js/time.js" %}"></script>
-    <!--引入CSS-->
-    <link rel="stylesheet" type="text/css" href="{% static "uploader/webuploader.css" %}">
-
-    <!--引入JS-->
-    <script type="text/javascript" src="{% static "uploader/webuploader.js" %}"></script>
-
-    <!--SWF在初始化的时候指定，在后面将展示-->
 </head>
 <body>
-<header data-am-widget="header" class="am-header am-header-default sq-head ">
-    <div class="am-header-left am-header-nav">
-        <a href="javascript:history.back()" class="">
-            <i class="am-icon-chevron-left"></i>
-        </a>
-    </div>
-    <h1 class="am-header-title">
-        <a href="" class="">登录</a>
-    </h1>
-</header>
-<div style="height: 49px;"></div>
-{% block content %}
+{% block head_content %}
     内容
 {% endblock %}
 <div style="height: 55px;"></div>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
     <ul class="am-navbar-nav am-cf am-avg-sm-5">
         <li>
-            <a href="{% url "commodity:首页" %}" class="">
+            <a href="{% url "commodity:首页" %}" class="curr">
                 <span class="am-icon-home"></span>
                 <span class="am-navbar-label">首页</span>
             </a>
@@ -67,7 +49,7 @@
         </li>
 
         <li>
-            <a href="{% url "user:个人中心" %}" class="curr">
+            <a href="member.html" class="">
                 <span class="am-icon-user"></span>
                 <span class="am-navbar-label">我的</span>
             </a>
@@ -84,7 +66,10 @@
 
 <script src="{% static "js/jquery.min.js" %}"></script>
 <script src="{% static "js/amazeui.min.js" %}"></script>
-{% block foot_js %}
+{% block foot_content %}
+
+{% endblock %}
+{% block fott_js %}
 
 {% endblock %}
 </body>

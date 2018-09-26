@@ -3,7 +3,7 @@ from django.db import models
 
 
 # Create your models here.
-# 用户信息表
+# 冗余继承表
 class BoseModel(models.Model):
     add_time = models.DateField(auto_now_add=True, verbose_name="添加时间")
     Modify_time = models.DateField(auto_now=True, verbose_name="修改时间")
@@ -13,6 +13,7 @@ class BoseModel(models.Model):
         abstract = True
 
 
+# 个人资料回显
 class User(BoseModel):
     # 性别选项
     sex_choices = (
@@ -30,4 +31,7 @@ class User(BoseModel):
     school = models.CharField(max_length=50, null=True, blank=True, verbose_name="学校")
     location = models.CharField(max_length=255, null=True, blank=True, verbose_name="位置")
     hometown = models.CharField(max_length=255, null=True, blank=True, verbose_name="故乡")
-    head_photo = models.ImageField(upload_to="user/%Y%m/%d", default="user/infortx.png",verbose_name="用户头像")
+    head_photo = models.ImageField(upload_to="user/%Y%m/%d", default="user/infortx.png", verbose_name="用户头像")
+
+
+

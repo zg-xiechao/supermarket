@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user',  # 用户应用
+    "commodity",  # 商品应用
+    "ckeditor",  # 富文本框编辑器
+    "ckeditor_uploader",  # 添加ckeditor富文本编辑器文件上传部件
+
 ]
 
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
@@ -122,12 +126,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
-# 配置图片路径
-MEDIA_URL = "/static/media/"
-# 图片上传路径
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+
+# 更改静态文件根目录
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
+# # 配置图片路径
+# MEDIA_URL = "/static/media/"
+# # 图片上传路径
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 
 # 缓存配置
 CACHES = {
@@ -143,4 +150,26 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
+# 七牛云密钥等配置
+QINIU_ACCESS_KEY = 'EUbw8nG5Ms1u1yc58ExWb8Cf91eZai-4qM7Hzq9z'
+QINIU_SECRET_KEY = 'EpkwY5oaTKu-Obyzto-IZrvX3BtXHuK7wpZAz7Ar'
+QINIU_BUCKET_NAME = 'x994132001'
+QINIU_BUCKET_DOMAIN = 'pfle7yjas.bkt.clouddn.com'
+QINIU_SECURE_URL = False  # 使用http
+PREFIX_URL = 'http://'
 
+# 上传文件地址配置
+MEDIA_URL = PREFIX_URL + QINIU_BUCKET_DOMAIN + "/"
+# 上传文件的存储引擎配置
+DEFAULT_FILE_STORAGE = 'qiniustorage.backends.QiniuStorage'
+
+
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+# 编辑器样式配置
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+    },
+}
