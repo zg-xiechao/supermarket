@@ -1,162 +1,197 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>超市</title>
-        <meta name="description" content="">
-        <meta name="keywords" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <meta name="renderer" content="webkit">
-{#        <meta http-equiv="Cache-Control" content="no-siteapp" />#}
-{#        <link rel="icon" type="image/png" href="/theme/default/images/favicon.png">#}
-		<link href="{% static "css/amazeui.min.css" %}" rel="stylesheet" type="text/css" />
-		<link href="{% static "css/style.css" %}" rel="stylesheet" type="text/css" />
-		<script src="{% static "js/jquery-1.10.2.min.js" %}"></script>
-		<script>
-        	function changeImage(){
-              document.getElementById("imgflag").src="images/redherat.png";
-           }
-        </script>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>超市</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    {#        <meta http-equiv="Cache-Control" content="no-siteapp" />#}
+    {#        <link rel="icon" type="image/png" href="/theme/default/images/favicon.png">#}
+    <link href="{% static "css/amazeui.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "css/style.css" %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static "js/jquery-1.10.2.min.js" %}"></script>
+    <script>
+        function changeImage() {
+            document.getElementById("imgflag").src = "images/redherat.png";
+        }
+    </script>
 
-		<style>
-			.am-slider-default .am-control-nav{ text-align: center;}
-			.am-slider-default .am-control-nav li a.am-active{ background: #cb2527;}
-			.am-slider-default .am-control-nav li a{ border: 0; width: 10px; height: 10px;}
-		</style>
-	</head>
-	<body>
-		<header data-am-widget="header" class="am-header am-header-default sq-head ">
-			<div class="am-header-left am-header-nav">
-				<a href="javascript:history.back()" class="">
-					<i class="am-icon-chevron-left"></i>
-				</a>
-			</div>
-			<h1 class="am-header-title">
-  	            <a href="" class="">商品详情</a>
-            </h1>
-	    </header>
-	    <div style="height: 49px;"></div>
-	    <!--图片轮换-->
-		<div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
-		  <ul class="am-slides">
-              {% for good in goods.goodsphoto_set.all %}
-              <li><img src="{{ MEDIA_URL }}{{ good.photo_url }}" /></li>
-              {% endfor %}
-		  </ul>
-		</div>
-		<div class="detal-info" style="position: relative; width: 100%;">
-			<p>{{ goods.goods_spu.spu_name }}&emsp;{{ goods.sku_name }}</p>
-			<h2>商城价：<span>￥{{ goods.price }}</span></h2>
-			<div class="heart">
-				<img src="{% static "images/herat.png" %}" width="25" id="imgflag" onclick="changeImage()" />
-				<p>收藏</p>
-			</div>
-		</div>
-		<div class="d-amount">
-        	<h4>数量：</h4>
-            <div class="d-stock">
-              <a class="decrease">-</a>
-                <input id="num" readonly="" class="text_box" name="" type="text" value="1">
-                <input id="id" type="hidden" value="644">
-                <a class="increase">+</a>
-               <span id="dprice" class="price" style="display:none"> 36</span>
-            </div>
+    <style>
+        .am-slider-default .am-control-nav {
+            text-align: center;
+        }
+
+        .am-slider-default .am-control-nav li a.am-active {
+            background: #cb2527;
+        }
+
+        .am-slider-default .am-control-nav li a {
+            border: 0;
+            width: 10px;
+            height: 10px;
+        }
+    </style>
+</head>
+<body>
+<header data-am-widget="header" class="am-header am-header-default sq-head ">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.back()" class="">
+            <i class="am-icon-chevron-left"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        <a href="" class="">商品详情</a>
+    </h1>
+</header>
+<div style="height: 49px;"></div>
+<!--图片轮换-->
+<div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
+    <ul class="am-slides">
+        {% for good in goods.goodsphoto_set.all %}
+            <li><img src="{{ MEDIA_URL }}{{ good.photo_url }}"/></li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="detal-info" style="position: relative; width: 100%;">
+    <p>{{ goods.goods_spu.spu_name }}&emsp;{{ goods.sku_name }}</p>
+    <h2>商城价：<span>￥{{ goods.price }}</span></h2>
+    <div class="heart">
+        <img src="{% static "images/herat.png" %}" width="25" id="imgflag" onclick="changeImage()"/>
+        <p>收藏</p>
+    </div>
+</div>
+<div class="d-amount">
+    <h4>数量：</h4>
+    <div class="d-stock">
+        <a class="decrease">-</a>
+        <input id="num" readonly="" class="text_box" name="" type="text" value="1">
+        <input id="goods_num" type="hidden" value="1">
+        <a class="increase">+</a>
+        <span id="dprice" class="price" style="display:none">36</span>
+    </div>
+</div>
+<div style="background: #eee; height: 10px;"></div>
+<div class="am-tabs detail-list" data-am-tabs>
+    <ul class="am-tabs-nav am-nav am-nav-tabs">
+        <li class="am-active"><a href="#tab1">商品详情</a></li>
+        <li><a href="#tab2">商品评论</a></li>
+    </ul>
+    <div class="am-tabs-bd">
+        <div class="am-tab-panel am-fade am-in am-active detail " id="tab1">
+            {{ goods.goods_spu.info|safe }}
         </div>
-        <div style="background: #eee; height: 10px;"></div>
-        <div class="am-tabs detail-list" data-am-tabs>
-		  <ul class="am-tabs-nav am-nav am-nav-tabs">
-		    <li class="am-active"><a href="#tab1">商品详情</a></li>
-		    <li><a href="#tab2">商品评论</a></li>
-		  </ul>
-		
-		  <div class="am-tabs-bd">
-		    <div class="am-tab-panel am-fade am-in am-active detail " id="tab1" >
-		            {{ goods.goods_spu.info|safe }}
-		    </div>
-		    <div class="am-tab-panel am-fade detail " id="tab2">
-		         <!--<div class="comment">
-		         	<span>好评：</span>
-		         	<div class="com-good"></div>
-		         	<span>100%</span>
-		         </div>
-		         <div class="comment">
-		         	<span>中评：</span>
-		         	<div class="com-bad"></div>
-		         	<span>0%</span>
-		         </div>
-		         <div class="comment">
-		         	<span>差评：</span>
-		         	<div class="com-bad"></div>
-		         	<span>0%</span>
-		         </div>-->
-		         <ul class="comment-list">
-		           <li class="current"><a href="">全部</a></li>
-		           <li><a href="">好评（20）</a></li>
-		           <li><a href="">中评（5）</a></li>
-		           <li><a href="">差评（0）</a></li>
-		         </ul>
-		         <ul class="comment-pic">
-		         	<li>
-		         		<div class="tit">
-		         			<img src="{% static "images/tx.png" %}" class="tx" />
-		         			<span>songke2014</span>
-		         			<i> [2016-01-01]</i>
-		         		</div>
-		         		<div class="comment-con">
-		         			买了些给家人，都说不错！
-		         		</div>
-		         	</li>
-		         	<li>
-		         		<div class="tit">
-		         			<img src="{% static "images/tx.png" %}" class="tx" />
-		         			<span>songke2014</span>
-		         			<i> [2016-01-01]</i>
-		         		</div>
-		         		<div class="comment-con">
-		         			买了些给家人，都说不错！
-		         		</div>
-		         	</li>
-		         </ul>
-		    </div>
-		  </div>
-		</div>
-		
-		
-		<!--底部-->
- <div style=" height: 55px;"></div>
- <ul class="fix-shopping">
- 	<li><a href="shopcart.html" class="join">加入购物车</a></li>
- 	<li><a href="tureorder.html" class="imm-buy">立即购买</a></li>
- </ul>
- 
- <script>
-	//购物数量加减
-	$(function(){
-		$('.increase').click(function(){
-			var self = $(this);
-			var current_num = parseInt(self.siblings('input').val());
-			current_num += 1;
-			self.siblings('input').val(current_num);
-			update_item(self.siblings('input').data('item-id'));
-		})		
-		$('.decrease').click(function(){
-			var self = $(this);
-			var current_num = parseInt(self.siblings('input').val());
-			if(current_num > 1){
-				current_num -= 1;
-				self.siblings('input').val(current_num);
-				update_item(self.siblings('input').data('item-id'));
-			}
-		})
-	})
+        <div class="am-tab-panel am-fade detail " id="tab2">
+            <!--<div class="comment">
+                <span>好评：</span>
+                <div class="com-good"></div>
+                <span>100%</span>
+            </div>
+            <div class="comment">
+                <span>中评：</span>
+                <div class="com-bad"></div>
+                <span>0%</span>
+            </div>
+            <div class="comment">
+                <span>差评：</span>
+                <div class="com-bad"></div>
+                <span>0%</span>
+            </div>-->
+            <ul class="comment-list">
+                <li class="current"><a href="">全部</a></li>
+                <li><a href="">好评（20）</a></li>
+                <li><a href="">中评（5）</a></li>
+                <li><a href="">差评（0）</a></li>
+            </ul>
+            <ul class="comment-pic">
+                <li>
+                    <div class="tit">
+                        <img src="{% static "images/tx.png" %}" class="tx"/>
+                        <span>songke2014</span>
+                        <i> [2016-01-01]</i>
+                    </div>
+                    <div class="comment-con">
+                        买了些给家人，都说不错！
+                    </div>
+                </li>
+                <li>
+                    <div class="tit">
+                        <img src="{% static "images/tx.png" %}" class="tx"/>
+                        <span>songke2014</span>
+                        <i> [2016-01-01]</i>
+                    </div>
+                    <div class="comment-con">
+                        买了些给家人，都说不错！
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<!--底部-->
+<div style=" height: 55px;"></div>
+<ul class="fix-shopping">
+    <li><a href="#" class="join" goods_id="{{ goods.pk }}">加入购物车</a></li>
+    <li><a href="tureorder.html" class="imm-buy">立即购买</a></li>
+</ul>
+
+<script>
+    //购物数量加减
+    $(function () {
+        $('.increase').click(function () {
+            var self = $(this);
+            var current_num = parseInt(self.siblings('input').val());
+            current_num += 1;
+            self.siblings('input').val(current_num);
+            {#update_item(self.siblings('input').data('item-id'));#}
+        });
+        $('.decrease').click(function () {
+            var self = $(this);
+            var current_num = parseInt(self.siblings('input').val());
+            if (current_num > 1) {
+                current_num -= 1;
+                self.siblings('input').val(current_num);
+                {#update_item(self.siblings('input').data('item-id'));#}
+            }
+        });
+        $(".join").click(function () {
+            {#获取goods_num 的值#}
+            var goods_num = $("#goods_num").attr("value");
+
+            {#获取商品id的值#}
+            var goods_id = $(this).attr("goods_id");
+            data = {
+                "csrfmiddlewaretoken": "{{ csrf_token }}",
+                "goods_id": goods_id,
+                "goods_num": goods_num,
+            };
+
+            $.post("{% url "cart:增加商品" %}", data, function (data) {
+                {#判断状态#}
+                console.log(data)
+                if (data.errors == 1) {
+                    {#说明没有登录,需要跳转到登录页面#}
+                    var re = confirm("没有登录,是否跳转到登录页面?");
+                    if (re) {
+                        location.href = "{% url 'user:登陆页面' %}?next={% url 'commodity:详情' goods.id %}"
+                    }
+                }
+                else if (data.errors == 0) {
+                    alert("成功添加到购物车")
+                }
+                else{
+                    alert(data.msg)
+                }
+            })
+        })
+    })
 </script>
- 
- 
- 
- 
 <script src="{% static "js/jquery.min.js" %}"></script>
 <script src="{% static "js/amazeui.min.js" %}"></script>
-	</body>
+</body>
 </html>

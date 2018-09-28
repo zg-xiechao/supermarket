@@ -26,7 +26,8 @@
         </div>
         <h1 class="am-header-title1">
             <div class="search-box">
-                <a href="village.html" class="index-search">南昌大学前湖校区∨</a>
+
+                <a href="{% url "commodity:首页搜索" %}" class="index-search">南昌大学前湖校区</a>
                 <!--  <input type="submit" value="" class="search-icon" /> -->
             </div>
         </h1>
@@ -127,8 +128,8 @@
             {{ datum.name }}
             <ul data-am-widget="gallery"
                 class="am-gallery pro-list am-avg-sm-2 am-avg-md-2 am-avg-lg-4 am-gallery-default">
-                {% for activitygoods in data.0.activitygoods766_set.all %}
-   k                 <li>
+                {% for activitygoods in datum.activitygoods_set.all %}
+                    <li>
                         <div class="am-gallery-item">
                             <a href="{% url "commodity:详情" activitygoods.goods_sku.id %}" class="">
                                 <img src=" {{ MEDIA_URL }}{{ activitygoods.goods_sku.logo }}"/>
@@ -154,6 +155,7 @@
         </div>
     </div>
     <!--签到-->
+
 {% endblock %}
 {% block fott_js %}
     <script type='text/javascript'>

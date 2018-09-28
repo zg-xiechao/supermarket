@@ -20,6 +20,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # 上传部件自动调用的上传地址
     url(r'^ckeditor/', include("ckeditor_uploader.urls")),
+    # 全文搜索框架
+    url(r'^search/', include('haystack.urls',namespace="搜索")),
     url(r'^user/', include("user.urls", namespace="user")),
-    url(r'^commodity/', include("commodity.urls", namespace="commodity"))
+    url(r'^commodity/', include("commodity.urls", namespace="commodity")),
+    url(r'^cart/', include("cart.urls", namespace="cart"))
 ]

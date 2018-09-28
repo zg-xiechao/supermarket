@@ -1,0 +1,3 @@
+{{object.sku_name}}
+{{object.goods_info}}
+{{object.goods_spu.info}}

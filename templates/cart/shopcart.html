@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>超市</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="renderer" content="webkit">
+    {#        <meta http-equiv="Cache-Control" content="no-siteapp" />#}
+    {#        <link rel="icon" type="image/png" href="/theme/default/images/favicon.png">#}
+    <link href="{% static "css/amazeui.min.css" %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static "css/style.css" %}" rel="stylesheet" type="text/css"/>
+    <script src="{% static "js/jquery-1.10.2.min.js" %}"></script>
+</head>
+<body>
+<header data-am-widget="header" class="am-header am-header-default sq-head ">
+    <div class="am-header-left am-header-nav">
+        <a href="javascript:history.back()" class="">
+            <i class="am-icon-chevron-left"></i>
+        </a>
+    </div>
+    <h1 class="am-header-title">
+        <a href="" class="">购物车</a>
+    </h1>
+</header>
+<div style="height: 49px;"></div>
+<ul class="shopcart-list">
+    {% for foo in goodsList %}
+        <li>
+            <label class="am-checkbox am-warning">
+                <input type="checkbox" checked="checked" value="" data-am-ucheck>
+            </label>
+            <a href="{% url 'commodity:详情' foo.pk  %}"><img src="{{ MEDIA_URL }}{{ foo.logo }}" class="shop-pic"/></a>
+            <div class="shop-list-mid">
+                <div class="tit"><a href="{% url 'commodity:详情' foo.pk  %}">{{ foo.sku_name }}</a></div>
+                ￥<b class="shop-list-price">{{ foo.price }} </b>
+            </div>
+            <div class="list-cart1">
+                <div class="d-stock">
+                    <a class="decrease">-</a>
+                    <input goods_id="{{ foo.pk }}" readonly="" class="text_box" name="" type="text"
+                           value="{{ foo.count }}">
+                    <a class="increase">+</a>
+                </div>
+            </div>
+        </li>
+        <div style="height: 10px; background: #eee;"></div>
+        {% empty %}
+        <!--购物车空的状态-->
+<div class="login-logo">
+    <img src="{% static "images/care.png" %}">
+    <p>亲、您的购物车还是空空的哦，快去装满它!</p>
+    <a href="index.html" class="goshopping">前去逛逛</a>
+</div>
+    {% endfor %}
+</ul>
+
+
+
+<div class="shop-fix">
+
+    <label class="am-checkbox am-warning">
+        <input type="checkbox" id="checkedall" checked="checked" value="" data-am-ucheck>
+    </label>
+    {#    <a class="del">全选</a>#}
+    <a href="tureorder.html" class="js-btn">去结算</a>
+    <div class="js-text">
+        <P>合计：￥<b id="prices">{{ total }}</b></P>
+        <p class="js-car">免费配送</p>
+    </div>
+</div>
+<!--底部-->
+<div style="height: 55px;"></div>
+<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
+    <ul class="am-navbar-nav am-cf am-avg-sm-5">
+        <li>
+            <a href="index.html" class="">
+                <span class="am-icon-home"></span>
+                <span class="am-navbar-label">首页</span>
+            </a>
+        </li>
+        <li>
+            <a href="message.html" class="">
+                <span class="am-icon-comments"></span>
+                <span class="am-navbar-label">动态</span>
+            </a>
+        </li>
+        <li>
+            <a href="shopcart.html" class="">
+                <span class="am-icon-shopping-cart"></span>
+                <span class="am-navbar-label">购物车</span>
+            </a>
+        </li>
+        <li>
+            <a href="allorder.html" class="">
+                <span class="am-icon-file-text"></span>
+                <span class="am-navbar-label">订单</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="member.html" class="curr">
+                <span class="am-icon-user"></span>
+                <span class="am-navbar-label">我的</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<script>
+
+    $(function () {
+        //购物数量加
+        $('.increase').click(function () {
+            var self = $(this);
+            var current_num = parseInt(self.siblings('input').val());
+            current_num += 1;
+            self.siblings('input').val(current_num);
+            {#获取到数据,商品id,商品数量#}
+            var goods_id = self.siblings('input').attr("goods_id")
+            var goods_num = 1
+            {#发送ajax#}
+            data = {
+                "csrfmiddlewaretoken": "{{ csrf_token }}",
+                "goods_id": goods_id,
+                "goods_num": goods_num
+            }
+            $.post("{% url 'cart:增加商品' %}", data, function (data) {
+                if (data.errors == 1) {
+                    var re = confirm("用户没有登录,请登录")
+                    if (re) {
+                        location.href = "{% url 'user:登陆页面' %}?next={% url 'cart:购物车' %}"
+                    }
+                } else if (data.errors == 0) {
+                    $(".text_box").html(data.goods_num)
+                } else {
+                    alert(data.msg)
+                }
+            })
+            calculatePrice()
+        });
+
+        //购物数量减
+        $('.decrease').click(function () {
+            var self = $(this);
+            var current_num = parseInt(self.siblings('input').val());
+            if (current_num > 0) {
+                current_num -= 1;
+                if (current_num < 1) {
+                    //将li删除
+                    $(this).parents('li').remove();
+                }
+                self.siblings('input').val(current_num);
+
+                {#获取到数据,商品id,商品数量#}
+                var goods_id = self.siblings('input').attr("goods_id");
+                var goods_num = 1;
+                {#发送ajax#}
+                data = {
+                    "csrfmiddlewaretoken": "{{ csrf_token }}",
+                    "goods_id": goods_id,
+                    "goods_num": goods_num
+                }
+                $.post("{% url 'cart:删除商品' %}", data, function (data) {
+                    if (data.errors == 1) {
+                        var re = confirm("用户没有登录,请登录");
+                        if (re) {
+                            location.href = "{% url 'user:登陆页面' %}?next={% url 'cart:购物车' %}"
+                        }
+                    } else if (data.errors == 0) {
+                        $(".text_box").html(data.goods_num);
+                        calculatePrice()
+                    } else {
+                        alert(data.msg)
+                    }
+                })
+            }
+
+        });
+
+        //全选和全不选
+        $("#checkedall").on("change", function () {
+            var status = $(this).prop("checked");
+            var checkboxes = $(".shopcart-list").find(":checkbox");
+            checkboxes.prop("checked", status);
+            calculatePrice()
+        });
+        {#如果其中一个不选中,全选框就为未选中#}
+        {#获取到所有的复选框,分别判断他们的状态#}
+        $(".shopcart-list").find(":checkbox").on("change", function () {
+            if ($(".shopcart-list").find(":checkbox").length != $(".shopcart-list").find(":checked").length) {
+                $("#checkedall").prop("checked", false)
+            }else{
+                $("#checkedall").prop("checked", true)
+            }
+            calculatePrice()
+        });
+
+
+        {#写一个计算价格的函数#}
+
+        function calculatePrice() {
+            var prices = 0;
+            var counts = 0;
+            {#1. 查找出所有选中的复选框#}
+            var checkeds = $(".shopcart-list").find(":checked");
+            checkeds.each(function (i, checkbox) {
+                {#2.根据复选框查找出父类li#}
+                var li = $(checkbox).parents("li");
+                {#3. 在li中查找商品价格#}
+                var price = li.find(".shop-list-price").text();
+                price = parseFloat(price);
+                {#4. 在li中查找商品数量#}
+                var count = li.find(".text_box").val();
+                count = parseInt(count);
+                {#计算出价格#}
+                counts += count;
+                prices += price * count
+            })
+            $("#prices").text(prices)
+        }
+
+
+    })
+</script>
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script src="{% static "js/amazeui.min.js" %}"></script>
+</body>
+</html>

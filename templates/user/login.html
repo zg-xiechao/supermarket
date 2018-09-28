@@ -8,7 +8,7 @@
 {% endblock %}
 {% block content %}
     <div style="height: 3rem;"></div>
-    <form action="{% url "user:登陆页面" %}" method="post">
+    <form action="" method="post">
         {% csrf_token %}
         <input type="text" name="phone" id="mobile" placeholder="请输入用户名/手机号" class="login-name">
         <p class="text-danger">{{ form.errors.phone.0 }}</p>

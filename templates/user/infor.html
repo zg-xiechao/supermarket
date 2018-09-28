@@ -20,11 +20,17 @@
                 </div>
             </a>
         </li>
-        <div id="uploader-demo">
-            <!--用来存放item-->
-            <div id="fileList" class="uploader-list"></div>
-            <div id="filePicker">选择图片</div>
-        </div>
+        <form action="{% url "user:个人资料" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="head">
+            <input type="submit" value="提交">
+
+        </form>
+                <div id="uploader-demo">
+                    <!--用来存放item-->
+                    <div id="fileList" class="uploader-list"></div>
+                    <div id="filePicker">选择图片</div>
+                </div>
         <form action="{% url "user:个人资料" %}" method="post" novalidate>
             {% csrf_token %}
             <li>
@@ -86,7 +92,7 @@
 
 {% endblock %}
 {% block foot_js %}
-<script>
+    <script>
         // 初始化Web Uploader
         var uploader = WebUploader.create({
             // 选完文件后，是否自动上传。

@@ -35,6 +35,9 @@ class LoginView(View):
             request.session['phone'] = user.phone
             # 设置有效期, 关闭浏览器就 重新登录
             request.session.set_expiry(0)
+            next = request.GET.get("next")
+            if next:
+                return redirect(next)
             return redirect(reverse("user:个人中心"))
         return render(request, "user/login.html", {"form": form})
         # 获取数据
@@ -164,6 +167,10 @@ class InfoView(View):
         id = request.session.get("ID")
         # 接收用户修改的数据
         data = request.POST
+        # file = request.FILES["head"]
+        # user = User.objects.filter(pk=id)
+        # user.head_photo = file
+        # user.save()
         # form = InfoForm(data)
         # if form.is_valid():
         nickname = data.get("nickname")
@@ -196,7 +203,6 @@ def head_photo(request):
         user = User.objects.filter(id=id)
         user.head_photo = request.FILES["file"]
         user.save()
-
         return JsonResponse({"error": 0})
     else:
         return JsonResponse({"error": 1})
